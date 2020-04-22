@@ -33,7 +33,8 @@ class ArticleController extends Controller
             (object) [
                 'id' => 3,
                 'title' => 'タイトル3',
-                'body' => '本文3',
+                'body' => '本文3
+                改行',
                 'created_at' => now(),
                 'user' => (object) [
                     'id' => 3,
