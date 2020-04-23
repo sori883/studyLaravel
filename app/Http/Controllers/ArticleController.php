@@ -34,7 +34,7 @@ class ArticleController extends Controller
                 'id' => 3,
                 'title' => 'タイトル3',
                 'body' => '本文3
-                改行',
+                改行', // こんな改行も行けるみたい
                 'created_at' => now(),
                 'user' => (object) [
                     'id' => 3,
