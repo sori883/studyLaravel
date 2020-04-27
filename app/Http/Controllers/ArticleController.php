@@ -2,46 +2,17 @@
 
 namespace App\Http\Controllers;
 
+// Articleモデルを追加
+use App\Article;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        // ダミーデータ
-        $articles = [
-            (object) [ // (object)は型キャスト。配列をobjectに変更している（DBから読み込んだデータはobjectになるのでそれに合わせるため）
-                'id' => 1,
-                'title' => 'タイトル1',
-                'body' => '本文1',
-                'created_at' => now(),
-                'user' => (object) [
-                    'id' => 1,
-                    'name' => 'ユーザー名1',
-                ],
-            ],
-            (object) [
-                'id' => 2,
-                'title' => 'タイトル2',
-                'body' => '本文2',
-                'created_at' => now(),
-                'user' => (object) [
-                    'id' => 2,
-                    'name' => 'ユーザー名2',
-                ],
-            ],
-            (object) [
-                'id' => 3,
-                'title' => 'タイトル3',
-                'body' => '本文3
-                改行', // こんな改行も行けるみたい
-                'created_at' => now(),
-                'user' => (object) [
-                    'id' => 3,
-                    'name' => 'ユーザー名3',
-                ],
-            ],
-        ];
+        // モデルクラスが持つall()メソッドを使用して、Articleモデルから全データをコレクションで取得
+        // 更に、コレクションメソッドのcreated_atで新しい記事順に並び替えて$articlesに格納
+        $articles = Article::all()->sortByDesc('created_at');
  
         // laravel-sns\laravel\resources\views\articles\indexを参照する
         return view('articles.index', ['articles' => $articles]);
