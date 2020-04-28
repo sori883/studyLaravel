@@ -11,4 +11,5 @@
 |
 */
 
-Route::get('/', 'ArticleController@index');
+Auth::routes(); // 認証用
+Route::get('/', 'ArticleController@index'); // index
