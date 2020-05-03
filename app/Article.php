@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Article extends Model
 {
+    protected $fillable = [
+        'title',
+        'body',
+    ];
+
     public function user(): BelongsTo // BelongsToは戻り値の型
     {
         // belongsToメソッドは、関係するモデルとのリレーションを返す。

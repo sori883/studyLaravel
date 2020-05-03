@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-// Articleモデルを追加
-use App\Article;
+
+use App\Article; // Articleモデル
+use App\Http\Requests\ArticleRequest; // フォームリクエスト
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -16,5 +17,20 @@ class ArticleController extends Controller
  
         // laravel-sns\laravel\resources\views\articles\indexを参照する
         return view('articles.index', ['articles' => $articles]);
+    }
+
+    // 記事登録画面表示用
+    public function create()
+    {
+        return view('articles.create');    
+    }
+
+    // 記事登録用
+    public function store(ArticleRequest $request, Article $article)
+    {
+        $article->fill($request->all());
+        $article->user_id = $request->user()->id;
+        $article->save();
+        return redirect()->route('articles.index');
     }
 }

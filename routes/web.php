@@ -12,4 +12,5 @@
 */
 
 Auth::routes(); // 認証用
-Route::get('/', 'ArticleController@index'); // index
+Route::get('/', 'ArticleController@index')->name('articles.index');
+Route::resource('/articles', 'ArticleController')->except(['index'])->middleware('auth');
