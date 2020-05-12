@@ -39,7 +39,7 @@
       </div>
     </li>
     <form id="logout-button" method="POST" action="{{ route('logout') }}">
-    @csrf
+      @csrf
     </form>
     @endauth {{--この行を追加--}}
 
