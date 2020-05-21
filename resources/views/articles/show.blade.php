@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title', '記事詳細')
+@section('title', 'è¨˜äº‹è©³ç´°')
 
 @section('content')
   @include('nav')

@@ -19,7 +19,8 @@ class ArticleController extends Controller
     {
         // モデルクラスが持つall()メソッドを使用して、Articleモデルから全データをコレクションで取得
         // 更に、コレクションメソッドのcreated_atで新しい記事順に並び替えて$articlesに格納
-        $articles = Article::all()->sortByDesc('created_at');
+        $articles = Article::all()->sortByDesc('created_at')
+                                            ->load(['user', 'likes', 'tags']); 
  
         // laravel-sns\laravel\resources\views\articles\indexを参照する
         return view('articles.index', ['articles' => $articles]);
@@ -28,7 +29,11 @@ class ArticleController extends Controller
     // 記事登録画面表示用
     public function create()
     {
-        return view('articles.create');    
+        $allTagNames = $this->AllTagName();
+ 
+        return view('articles.create', [
+            'allTagNames' => $allTagNames,
+        ]);
     }
 
     // 記事登録用
@@ -48,12 +53,29 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        return view('articles.edit', ['article' => $article]);
+        $tagNames = $article->tags->map(function ($tag) {
+            return ['text' => $tag->name];
+        });
+
+        $allTagNames = $this->AllTagName();
+
+        return view('articles.edit', [
+            'article' => $article,
+            'tagNames' => $tagNames,
+            'allTagNames' => $allTagNames,
+        ]);
     }
 
     public function update(ArticleRequest $request, Article $article)
     {
         $article->fill($request->all())->save();
+
+        $article->tags()->detach();
+        $request->tags->each(function ($tagName) use ($article) {
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $article->tags()->attach($tag);
+        });
+
         return redirect()->route('articles.index');
     }
 
@@ -88,6 +110,13 @@ class ArticleController extends Controller
             'id' => $article->id,
             'countLikes' => $article->count_likes,
         ];
+    }
+
+    private function AllTagName()
+    {
+        return Tag::all()->map(function ($tag) {
+            return ['text' => $tag->name];
+        });
     }
 
 }
